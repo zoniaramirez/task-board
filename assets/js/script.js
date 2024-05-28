@@ -4,17 +4,23 @@ let nextId = JSON.parse(localStorage.getItem("nextId"));
 
 // TODO: create a function to generate a unique task id
 function generateTaskId() {
+  let nextId = JSON.parse(localStorage.getItem("nextId"));
   // if nextId does not exist in localStorage, set it to 1
-
-  // otherwise, increment it by 1
-
+ if (nextId === null) {
+    nextId = 1
+ } else {
+   // otherwise, increment it by 1
+    nextId++;
+ }
+ localStorage.setItem("nextId", nextId);
   // save nextId to localStorage
 }
 
 // TODO: create a function to create a task card
 function createTaskCard(task) {
   // create card elements
-
+  const card = document.createElement('div');
+  card.classList.add('cards');
   // set card background color based on due date
 
   // append card elements
