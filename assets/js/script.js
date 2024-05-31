@@ -12,30 +12,49 @@ function generateTaskId() {
    // otherwise, increment it by 1
     nextId++;
  }
- localStorage.setItem("nextId", nextId);
   // save nextId to localStorage
+  localStorage.setItem("nextId", nextId);
 }
 
 // TODO: create a function to create a task card
 function createTaskCard(task) {
   // create card elements
-  const card = document.createElement('div');
-  card.classList.add('cards');
+  const card = $('<div>').addClass('card');
+  const dueDate = newDate(task.dueDate);
+  const currentDate = newDate();
   // set card background color based on due date
-
+  
+  if (dueDate < currentDate) {
+    card.style.backgroundColor = 'red';
+  } else if (dueDate.getDate() - currentDate.getDate() <= 3) {
+    card.style.backgroundColor = 'yellow';
+  }
   // append card elements
+  let container;
+  if (task.status === 'todo') {
+    container = $('#todo-card');
+  } else if (task.status === 'inprogress') {
+    container = $('#in-progress-cards');
+  }
+ container.appendChild(card);
 }
 
 // TODO: create a function to render the task list and make cards draggable
 function renderTaskList() {
   // if taskList is null, set it to an empty array
-
+  if (taskList === null) {
+    taskList = [];
+  }
   // empty existing task cards
 
-  // loop through tasks and create task cards for each status
 
-  // make task cards draggable
+  
+  // loop through tasks and create task cards for each status
 }
+  // make task cards draggable
+  $( function() {
+    $( "#draggable" ).draggable();
+  } );
 
 // TODO: create a function to handle adding a new task
 function handleAddTask(event) {
@@ -67,6 +86,17 @@ $(document).ready(function () {
   // add event listener
 
   // make lanes droppable
+  $( function() {
+    // $( "#draggable" ).draggable();
+    $( "#droppable" ).droppable({
+      drop: function( event, ui ) {
+        $( this )
+          .addClass( "ui-state-highlight" )
+          .find( "p" )
+            .html( "Dropped!" );
+      }
+      });
+});
 
   // make due date field a date picker
 });
