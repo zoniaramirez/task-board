@@ -1,11 +1,10 @@
 // Retrieve tasks and nextId from localStorage
-let taskList = JSON.parse(localStorage.getItem("tasks"));
-let nextId = JSON.parse(localStorage.getItem("nextId"));
+let taskList = JSON.parse(localStorage.getItem("tasks")) || [];
+let nextId = JSON.parse(localStorage.getItem("nextId")) || 1;
 
 // TODO: create a function to generate a unique task id
 function generateTaskId() {
   // if nextId does not exist in localStorage, set it to 1
-  let nextId = JSON.parse(localStorage.getItem('nextId'));
   if (nextId === null) {
     nextId = 1
   } else {
@@ -14,19 +13,16 @@ function generateTaskId() {
   }
   // save nextId to localStorage
    localStorage.setItem('nextId', nextId);
-
    return nextId;
 }
-
-console.log('card created');
 
 // TODO: create a function to create a task card
 function createTaskCard(task) {
   // create card elements
-  let card = $('<div>').addClass('card').attr('id', 'task-' + task.id);
-  let cardHeader = $('<div>').addClass('card-header').text(task.name);
-  let dueDateEl = $('<div>').addClass('card-subtitle text-muted').text('Due Date:' + task.dueDate);
-  let cardBody = $('<div>').addClass('card-body').text(task.description);
+  let card = $('<div>').addClass('new-card')
+  let cardHeader = $('<h3>').addClass('card-header').text(task.name);
+  let dueDateEl = $('<p>').addClass('card-subtitle text-muted').text('Due Date:' + task.dueDate);
+  let cardBody = $('<p>').addClass('card-body').text(task.description);
   // set card background color based on due date
   let dueDate = dayjs(task.dueDate);
   if (dueDate.isBefore(dayjs(), 'day')) {
@@ -36,11 +32,13 @@ function createTaskCard(task) {
   }
   // append card elements
 
-  cardBody.append(cardHeader, dueDateEl);
+  card.append(cardHeader, dueDateEl, cardBody);
 
   let swimLane = getSwimLane(task.status);
   swimLane.append(card);
 
+  taskList.push(task);
+  localStorage.setItem('tasks', JSON.stringify(taskList));
 }
 
 // TODO: create a function to render the task list and make cards draggable
