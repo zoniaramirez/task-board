@@ -61,9 +61,21 @@ function renderTaskList() {
 
 // TODO: create a function to handle adding a new task
 function handleAddTask(event) {
+  event.preventDefault();
   // create a new task object
+  let newTask = {
+    id: generateTaskId(),
+    name: $('#task-name').val(),
+    dueDate: $('#due-date').val(),
+    description: $('#task-description').val();
+    status: 'todo'
+  };
 
   // add the new task to the taskList save and render
+
+  taskList.push(newTask);
+  localStorage.setItem('tasks', JSON.stringify(taskList));
+  renderTaskList();
 }
 
 // TODO: create a function to handle deleting a task
