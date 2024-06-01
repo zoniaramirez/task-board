@@ -14,15 +14,33 @@ function generateTaskId() {
   }
   // save nextId to localStorage
    localStorage.setItem('nextId', nextId);
+
+   return nextId;
 }
+
+console.log('card created');
 
 // TODO: create a function to create a task card
 function createTaskCard(task) {
   // create card elements
-
+  let card = $('<div>').addClass('card').attr('id', 'task-' + task.id);
+  let cardHeader = $('<div>').addClass('card-header').text(task.name);
+  let dueDateEl = $('<div>').addClass('card-subtitle text-muted').text('Due Date:' + task.dueDate);
+  let cardBody = $('<div>').addClass('card-body').text(task.description);
   // set card background color based on due date
-
+  let dueDate = dayjs(task.dueDate);
+  if (dueDate.isBefore(dayjs(), 'day')) {
+    card.addClass('bg-danger');
+  } else if (dueDate.isBefore(dayjs().add(1, 'week'), 'day')) {
+    card.addClass('bg-warning');
+  }
   // append card elements
+
+  cardBody.append(cardHeader, dueDateEl);
+
+  let swimLane = getSwimLane(task.status);
+  swimLane.append(card);
+
 }
 
 // TODO: create a function to render the task list and make cards draggable
