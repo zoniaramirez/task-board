@@ -67,7 +67,7 @@ function handleAddTask(event) {
     id: generateTaskId(),
     name: $('#task-name').val(),
     dueDate: $('#due-date').val(),
-    description: $('#task-description').val();
+    description: $('#task-description').val(),
     status: 'todo'
   };
 
@@ -92,10 +92,20 @@ function handleDeleteTask(event) {
 // TODO: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
   // get the task id and new status from the event
+  let taskId = ui.draggable.data('task-id');
+  let newStatus = $(event.target).data('status');
 
   // update the task status of the dragged card
+  taskList.forEach(task => {
+    if (task.id === taskId) {
+      task.status = newStatus;
+      }
+   });
 
   // save and render
+  localStorage.setItem('tasks', JSON.stringify(taskList));
+
+  renderTaskList();
 }
 
 // TODO: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
