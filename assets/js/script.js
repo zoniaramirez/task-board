@@ -44,12 +44,19 @@ function createTaskCard(task) {
 // TODO: create a function to render the task list and make cards draggable
 function renderTaskList() {
   // if taskList is null, set it to an empty array
-
+  if (taskList === null) {
+    taskList = [];
+  }
   // empty existing task cards
+  $('.new-card').remove();
 
   // loop through tasks and create task cards for each status
+  taskList.forEach(task => {
+     createTaskCard(task);
+});
 
   // make task cards draggable
+  $('.new-card').draggable();
 }
 
 // TODO: create a function to handle adding a new task
