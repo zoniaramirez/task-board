@@ -62,13 +62,7 @@ function renderTaskList() {
 }
   // make task cards draggable
   $( function() {
-    $( "#todo-cards .task-card" ).draggable();
-  } );
-  $( function() {
-    $( "#in-progress-cards .task-card" ).draggable();
-  } );
-  $( function() {
-    $( "#done-cards .task-card" ).draggable();
+    $( "#todo-cards .task-card, #in-progress-cards .task-card, #done-cards .task-card" ).draggable();
   } );
 
 // TODO: create a function to handle adding a new task
