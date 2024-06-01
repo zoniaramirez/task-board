@@ -32,7 +32,7 @@ function createTaskCard(task) {
   // append card elements
   let container;
   if (task.status === 'todo') {
-    container = $('#todo-card');
+    container = $('#todo-cards');
   } else if (task.status === 'inprogress') {
     container = $('#in-progress-cards');
   }
@@ -46,20 +46,35 @@ function renderTaskList() {
     taskList = [];
   }
   // empty existing task cards
-
+  $('#todo-cards, #in-progress-cards, #done-cards').empty();
 
   
   // loop through tasks and create task cards for each status
+  taskList.forEach(task => {
+    if (task.status === 'Not Started') {
+      createTaskCard(task, '#todo-cards');
+    } else if (task.status === 'In progress') {
+      createTaskCard(task, '#in-progress-cards');
+    } else if (task.status === 'Completed') {
+      createTaskCard(task, '#done-cards');
+    }
+  });
 }
   // make task cards draggable
   $( function() {
-    $( "#draggable" ).draggable();
+    $( "#todo-cards .task-card" ).draggable();
+  } );
+  $( function() {
+    $( "#in-progress-cards .task-card" ).draggable();
+  } );
+  $( function() {
+    $( "#done-cards .task-card" ).draggable();
   } );
 
 // TODO: create a function to handle adding a new task
 function handleAddTask(event) {
   // create a new task object
-
+  
   // add the new task to the taskList save and render
 }
 
