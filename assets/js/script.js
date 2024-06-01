@@ -5,10 +5,15 @@ let nextId = JSON.parse(localStorage.getItem("nextId"));
 // TODO: create a function to generate a unique task id
 function generateTaskId() {
   // if nextId does not exist in localStorage, set it to 1
-
+  let nextId = JSON.parse(localStorage.getItem('nextId'));
+  if (nextId === null) {
+    nextId = 1
+  } else {
   // otherwise, increment it by 1
-
+    nextId++;
+  }
   // save nextId to localStorage
+   localStorage.setItem('nextId', nextId);
 }
 
 // TODO: create a function to create a task card
