@@ -1,4 +1,5 @@
 // Retrieve tasks and nextId from localStorage
+$(document).ready(function () {
 let taskList = JSON.parse(localStorage.getItem("tasks")) || [];
 let nextId = JSON.parse(localStorage.getItem("nextId")) || 1;
 
@@ -12,33 +13,34 @@ function generateTaskId() {
     nextId++;
   }
   // save nextId to localStorage
-   localStorage.setItem('nextId', nextId);
-   return nextId;
+   localStorage.setItem("nextId", JSON.stringify(nextId));
 }
 
 // TODO: create a function to create a task card
 function createTaskCard(task) {
   // create card elements
-  let card = $('<div>').addClass('new-card')
-  let cardHeader = $('<h3>').addClass('card-header').text(task.name);
-  let dueDateEl = $('<p>').addClass('card-subtitle text-muted').text('Due Date:' + task.dueDate);
-  let cardBody = $('<p>').addClass('card-body').text(task.description);
+  let card = $("<div>").addClass("card");
+
   // set card background color based on due date
   let dueDate = dayjs(task.dueDate);
+  
   if (dueDate.isBefore(dayjs(), 'day')) {
     card.addClass('bg-danger');
   } else if (dueDate.isBefore(dayjs().add(1, 'week'), 'day')) {
     card.addClass('bg-warning');
-  }
+  }else {
+    card.addClass('bg-success');
+}
   // append card elements
+  let taskDetails = $("<div>").addClass("task-details");
+      taskDetails.append($("<p>").text("Task Name: " + task.name));
+      taskDetails.append($("<p>").text("Due Date: " + task.dueDate));
+      taskDetails.append($("<p>").text("Description: " + task.description));
 
-  card.append(cardHeader, dueDateEl, cardBody);
+  // swimLane.append(card);
+  card.append(taskDetails);
 
-  let swimLane = getSwimLane(task.status);
-  swimLane.append(card);
-
-  taskList.push(task);
-  localStorage.setItem('tasks', JSON.stringify(taskList));
+  $("#" + task.status + "-cards").append(card);
 }
 
 // TODO: create a function to render the task list and make cards draggable
@@ -111,10 +113,17 @@ function handleDrop(event, ui) {
 // TODO: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(function () {
   // render the task list
-
+    renderTaskList();
   // add event listener
+  $('#save').on('click', handleAddTask);
 
   // make lanes droppable
+  $('.lane').droppable({
+    drop: handleDrop
+  });
 
   // make due date field a date picker
+  $( function() {
+    $( "#due-date" ).datepicker();
+  });
 });
