@@ -17,4 +17,5 @@ body {
 
 .new-card {
   margin-bottom: 20px; 
+  z-index: 1000;
 }

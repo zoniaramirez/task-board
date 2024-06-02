@@ -46,12 +46,28 @@ function createTaskCard(task) {
       taskDetails.append($("<p>").text("Due Date: " + task.dueDate));
       taskDetails.append($("<p>").text("Description: " + task.description));
 
-  // swimLane.append(card);
   card.append(taskDetails);
 
-  $("#todo-cards").append(card);
+  // $("#todo-cards").append(card);
 
-  taskDetails.append($("<button>").text("Delete").addClass("btn btn-danger delete-btn").data("task-id", task.id).css("border", "2px solid black"));
+  card.append($("<button>").text("Delete").addClass("btn btn-danger delete-btn").data("task-id", task.id).css("border", "2px solid black"));
+
+  let columnId;
+  switch (task.status) {
+    case "todo":
+      columnId = "#todo-cards";
+      break;
+    case "in-progress":
+      columnId = "#in-progress-cards";
+      break;
+    case "done":
+      columnId = "#done-cards";
+      break;
+    default:
+      columnId = "#todo-cards"; // Default to "To Do" column
+  }
+  
+  $(columnId).append(card);
 }
 
 // TODO: create a function to render the task list and make cards draggable
@@ -143,8 +159,10 @@ $(document).ready(function () {
 
 
   // make lanes droppable
-  $(".lane").droppable({
-    drop: handleDrop
+  $(".colunm").droppable({
+    drop: function(event, ui) {
+    handleDrop(event, ui);
+    }
   });
 
   // make due date field a date picker
