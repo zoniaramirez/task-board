@@ -1,5 +1,5 @@
 const card = $('.new-car');
-const date = $('dayjs');
+const currentDate = $('dayjs');
 const taskDetails = $('task-details');
 const id = $('generateTaskId');
 const name = $("#task-name");
@@ -30,11 +30,12 @@ function createTaskCard(task) {
   let card = $("<div>").addClass("new-card");
 
   // set card background color based on due date
-  let date = dayjs(task.date);
+  let currentDate = dayjs();
+  let dueDate = dayjs(task.dueDate);
   
-  if (date.isBefore(dayjs(), 'day')) {
+  if (dueDate.isBefore(currentDate, 'day')) {
     card.addClass('bg-danger');
-  } else if (date.isBefore(dayjs().add(1, 'week'), 'day')) {
+  } else if (dueDate.isBefore(currentDate.add(1, 'week'), 'day')) {
     card.addClass('bg-warning');
   }else {
     card.addClass('bg-success');
@@ -86,6 +87,13 @@ function handleAddTask(event) {
   taskList.push(newTask);
   localStorage.setItem("tasks", JSON.stringify(taskList));
   renderTaskList();
+
+  $("#formModal").modal("hide");
+
+  // Clear the form fields
+  $("#task-name").val("");
+  $("#due-date").val("");
+  $("#task-description").val("");
 }
 
 // TODO: create a function to handle deleting a task
