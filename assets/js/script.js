@@ -50,6 +50,8 @@ function createTaskCard(task) {
   card.append(taskDetails);
 
   $("#todo-cards").append(card);
+
+  taskDetails.append($("<button>").text("Delete").addClass("btn btn-danger delete-btn").data("task-id", task.id));
 }
 
 // TODO: create a function to render the task list and make cards draggable
@@ -98,6 +100,7 @@ function handleAddTask(event) {
 
 // TODO: create a function to handle deleting a task
 function handleDeleteTask(event) {
+    
   // get the task id from the button clicked
   let taskId = $(event.target).data("task-id");
   // remove the task from the taskList, save and render
@@ -132,7 +135,7 @@ $(document).ready(function () {
     renderTaskList();
   // add event listener
   $("#save").click(handleAddTask);
-  $(".delete-btn").click(handleDeleteTask);
+  $(document).on("click", ".delete-btn", handleDeleteTask);
 
 
   // make lanes droppable
