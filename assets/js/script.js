@@ -100,14 +100,18 @@ function handleAddTask(event) {
 
 // TODO: create a function to handle deleting a task
 function handleDeleteTask(event) {
-    
+  event.preventDefault();
   // get the task id from the button clicked
   let taskId = $(event.target).data("task-id");
   // remove the task from the taskList, save and render
-  taskList = taskList.filter(task => task.id !== taskId);
-  localStorage.setItem("tasks", JSON.stringify(taskList));
+  let taskIndex = taskList.findIndex(task => task.id === taskId);
 
+  if (taskIndex !== -1) {
+    taskList.splice(taskIndex, 1);
+  
+  localStorage.setItem("tasks", JSON.stringify(taskList));
   renderTaskList();
+  }
 }
 
 // TODO: create a function to handle dropping a task into a new status lane
