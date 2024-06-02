@@ -34,7 +34,13 @@ function createTaskCard(task) {
     card.addClass('bg-warning');
   }else {
     card.addClass('bg-success');
-}
+  }
+
+  switch (task.status) {
+    case "done":
+      card.addClass('bg-white');
+  }
+
   // append card elements
   let taskDetails = $("<div>").addClass("task-details");
       taskDetails.append($("<h3>").text("Task Name: " + task.name));
@@ -80,8 +86,6 @@ function renderTaskList() {
 
   // make task cards draggable
   $(".new-card").draggable({
-    revert: "invalid",
-    cursor: "move"
   });
 }
 
