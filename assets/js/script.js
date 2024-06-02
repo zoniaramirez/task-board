@@ -35,7 +35,7 @@ function createTaskCard(task) {
   
   if (dueDate.isBefore(currentDate, 'day')) {
     card.addClass('bg-danger');
-  } else if (dueDate.isBefore(currentDate.add(1, 'week'), 'day')) {
+  } else if (dueDate.diff(currentDate, 'days') <= 2 && dueDate.diff(currentDate, 'days') >= 0) {
     card.addClass('bg-warning');
   }else {
     card.addClass('bg-success');
@@ -51,7 +51,7 @@ function createTaskCard(task) {
 
   $("#todo-cards").append(card);
 
-  taskDetails.append($("<button>").text("Delete").addClass("btn btn-danger delete-btn").data("task-id", task.id));
+  taskDetails.append($("<button>").text("Delete").addClass("btn btn-danger delete-btn").data("task-id", task.id).css("border", "2px solid black"));
 }
 
 // TODO: create a function to render the task list and make cards draggable
