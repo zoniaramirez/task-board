@@ -1,13 +1,8 @@
-const card = $('.new-car');
-const currentDate = $('dayjs');
-const taskDetails = $('task-details');
-const id = $('generateTaskId');
-const name = $("#task-name");
-const dueDate = $("#due-date");
-const description= $("#task-description");
+const card = $('.new-card');
+const currentDate = dayjs();
+const taskDetails = $('.task-details');
 
 // Retrieve tasks and nextId from localStorage
-// $(document).ready(function () {
 let taskList = JSON.parse(localStorage.getItem("tasks")) || [];
 let nextId = JSON.parse(localStorage.getItem("nextId")) || 1;
 
@@ -22,6 +17,7 @@ function generateTaskId() {
   }
   // save nextId to localStorage
    localStorage.setItem("nextId", JSON.stringify(nextId));
+   return nextId;
 }
 
 // TODO: create a function to create a task card
@@ -30,7 +26,6 @@ function createTaskCard(task) {
   let card = $("<div>").addClass("new-card");
 
   // set card background color based on due date
-  let currentDate = dayjs();
   let dueDate = dayjs(task.dueDate);
   
   if (dueDate.isBefore(currentDate, 'day')) {
@@ -48,23 +43,13 @@ function createTaskCard(task) {
 
   card.append(taskDetails);
 
-  // $("#todo-cards").append(card);
 
   card.append($("<button>").text("Delete").addClass("btn btn-danger delete-btn").data("task-id", task.id).css("border", "2px solid black"));
 
   let columnId;
   switch (task.status) {
-    case "todo":
-      columnId = "#todo-cards";
-      break;
-    case "in-progress":
-      columnId = "#in-progress-cards";
-      break;
-    case "done":
-      columnId = "#done-cards";
-      break;
     default:
-      columnId = "#todo-cards"; // Default to "To Do" column
+      columnId = "#todo-cards"; 
   }
   
   $(columnId).append(card);
@@ -133,8 +118,12 @@ function handleDeleteTask(event) {
 // TODO: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
   // get the task id and new status from the event
-  let taskId = ui.draggable.data("task-id");
-  let newStatus = $(event.target).data("status");
+  let taskId = ui.draggable.data('taskId');
+  let newStatus = event.target.dataset.status;
+  // update the task status of the dragged card
+
+  console.log("Task ID:", taskId);
+  console.log("New Status:", newStatus);
 
   // update the task status of the dragged card
   taskList.forEach(task => {
@@ -145,6 +134,8 @@ function handleDrop(event, ui) {
 
   // save and render
   localStorage.setItem("tasks", JSON.stringify(taskList));
+
+  console.log("Task List after update:", taskList);
 
   renderTaskList();
 }
@@ -159,7 +150,7 @@ $(document).ready(function () {
 
 
   // make lanes droppable
-  $(".colunm").droppable({
+  $(".column").droppable({
     drop: function(event, ui) {
     handleDrop(event, ui);
     }
