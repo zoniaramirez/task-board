@@ -1,5 +1,13 @@
+const card = $('.new-car');
+const date = $('dayjs');
+const taskDetails = $('task-details');
+const id = $('generateTaskId');
+const name = $("#task-name");
+const dueDate = $("#due-date");
+const description= $("#task-description");
+
 // Retrieve tasks and nextId from localStorage
-$(document).ready(function () {
+// $(document).ready(function () {
 let taskList = JSON.parse(localStorage.getItem("tasks")) || [];
 let nextId = JSON.parse(localStorage.getItem("nextId")) || 1;
 
@@ -22,31 +30,31 @@ function createTaskCard(task) {
   let card = $("<div>").addClass("new-card");
 
   // set card background color based on due date
-  let dueDate = dayjs(task.dueDate);
+  let date = dayjs(task.date);
   
-  if (dueDate.isBefore(dayjs(), 'day')) {
+  if (date.isBefore(dayjs(), 'day')) {
     card.addClass('bg-danger');
-  } else if (dueDate.isBefore(dayjs().add(1, 'week'), 'day')) {
+  } else if (date.isBefore(dayjs().add(1, 'week'), 'day')) {
     card.addClass('bg-warning');
   }else {
     card.addClass('bg-success');
 }
   // append card elements
   let taskDetails = $("<div>").addClass("task-details");
-      taskDetails.append($("<p>").text("Task Name: " + task.name));
+      taskDetails.append($("<h3>").text("Task Name: " + task.name));
       taskDetails.append($("<p>").text("Due Date: " + task.dueDate));
       taskDetails.append($("<p>").text("Description: " + task.description));
 
   // swimLane.append(card);
   card.append(taskDetails);
 
-  $("#" + task.status + "-cards").append(card);
+  $("#todo-cards").append(card);
 }
 
 // TODO: create a function to render the task list and make cards draggable
 function renderTaskList() {
   // if taskList is null, set it to an empty array
-  if (taskList === null) {
+  if (taskList === null || taskList.length === 0) {
     taskList = [];
   }
   // empty existing task cards
@@ -63,6 +71,7 @@ function renderTaskList() {
 
 // TODO: create a function to handle adding a new task
 function handleAddTask(event) {
+  event.preventDefault();
   // create a new task object
   let newTask = {
     id: generateTaskId(),
@@ -110,7 +119,7 @@ function handleDrop(event, ui) {
 }
 
 // TODO: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
-// $(document).ready(function () {
+$(document).ready(function () {
   // render the task list
     renderTaskList();
   // add event listener
