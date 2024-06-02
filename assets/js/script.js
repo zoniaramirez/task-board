@@ -1,4 +1,4 @@
-const card = $('.new-card');
+// const card = $('.new-card');
 const currentDate = dayjs();
 const taskDetails = $('.task-details');
 
@@ -23,7 +23,7 @@ function generateTaskId() {
 // TODO: create a function to create a task card
 function createTaskCard(task) {
   // create card elements
-  let card = $("<div>").addClass("new-card");
+  let card = $("<div>").addClass("new-card").attr("data-task-id", task.id);
 
   // set card background color based on due date
   let dueDate = dayjs(task.dueDate);
@@ -48,8 +48,17 @@ function createTaskCard(task) {
 
   let columnId;
   switch (task.status) {
-    default:
-      columnId = "#todo-cards"; 
+      case "todo":
+          columnId = "#todo-cards";
+          break;
+      case "in-progress":
+          columnId = "#in-progress-cards";
+          break;
+      case "done":
+          columnId = "#done-cards";
+          break;
+      default:
+          columnId = "#todo-cards";
   }
   
   $(columnId).append(card);
@@ -70,7 +79,10 @@ function renderTaskList() {
 });
 
   // make task cards draggable
-  $(".new-card").draggable();
+  $(".new-card").draggable({
+    revert: "invalid",
+    cursor: "move"
+  });
 }
 
 // TODO: create a function to handle adding a new task
@@ -118,12 +130,12 @@ function handleDeleteTask(event) {
 // TODO: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
   // get the task id and new status from the event
-  let taskId = ui.draggable.data('taskId');
-  let newStatus = event.target.dataset.status;
+  let taskId = ui.draggable.data('task-id');
+  let newStatus = event.target.closest('.lane').id;
   // update the task status of the dragged card
 
-  console.log("Task ID:", taskId);
-  console.log("New Status:", newStatus);
+  // console.log("Task ID:", taskId);
+  // console.log("New Status:", newStatus);
 
   // update the task status of the dragged card
   taskList.forEach(task => {
@@ -135,7 +147,7 @@ function handleDrop(event, ui) {
   // save and render
   localStorage.setItem("tasks", JSON.stringify(taskList));
 
-  console.log("Task List after update:", taskList);
+  // console.log("Task List after update:", taskList);
 
   renderTaskList();
 }
@@ -150,7 +162,7 @@ $(document).ready(function () {
 
 
   // make lanes droppable
-  $(".column").droppable({
+  $(".lane").droppable({
     drop: function(event, ui) {
     handleDrop(event, ui);
     }
