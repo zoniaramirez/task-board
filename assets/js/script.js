@@ -1,4 +1,3 @@
-// const card = $('.new-card');
 const currentDate = dayjs();
 const taskDetails = $('.task-details');
 
@@ -30,7 +29,7 @@ function createTaskCard(task) {
   
   if (dueDate.isBefore(currentDate, 'day')) {
     card.addClass('bg-danger');
-  } else if (dueDate.diff(currentDate, 'days') <= 2 && dueDate.diff(currentDate, 'days') >= 0) {
+  } else if (dueDate.diff(currentDate, 'days') <= 0 && dueDate.diff(currentDate, 'days') >= 0) {
     card.addClass('bg-warning');
   }else {
     card.addClass('bg-success');
@@ -86,6 +85,7 @@ function renderTaskList() {
 
   // make task cards draggable
   $(".new-card").draggable({
+    revert: true,
   });
 }
 
@@ -136,10 +136,6 @@ function handleDrop(event, ui) {
   // get the task id and new status from the event
   let taskId = ui.draggable.data('task-id');
   let newStatus = event.target.closest('.lane').id;
-  // update the task status of the dragged card
-
-  // console.log("Task ID:", taskId);
-  // console.log("New Status:", newStatus);
 
   // update the task status of the dragged card
   taskList.forEach(task => {
@@ -150,8 +146,6 @@ function handleDrop(event, ui) {
 
   // save and render
   localStorage.setItem("tasks", JSON.stringify(taskList));
-
-  // console.log("Task List after update:", taskList);
 
   renderTaskList();
 }
